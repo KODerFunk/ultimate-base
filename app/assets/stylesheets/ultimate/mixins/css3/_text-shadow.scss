@@ -19,9 +19,9 @@ $support-ie: true !default;
     text-shadow: $params;
     @if $support-ie {
       $params-offset: 0;
-      @if type-of($color) != 'color' {
+      @if type-of($color) != color {
         $color: nth($params, 1);
-        @if type-of($color) == 'color' {
+        @if type-of($color) == color {
           $params-offset: 1;
         } @else {
           $color: #000;
