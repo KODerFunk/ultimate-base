@@ -1,5 +1,6 @@
 # TODO timeout without cycling, maybe bouce effect
 # TODO mousewheel
+# TODO touch events
 
 Ultimate.Backbone.Views ||= {}
 
@@ -23,11 +24,11 @@ class Ultimate.Backbone.Views.Slider extends Ultimate.Backbone.View
   cycling: false
   interval: 0
   durationPerPixel: 2
+  moveItems: 0
 
   totalItems: 0
   itemSize: 0
   displayItems: 0
-  moveItems: 0
   overItems: 0
   prevItems: 0 # can as setting
 
@@ -46,7 +47,7 @@ class Ultimate.Backbone.Views.Slider extends Ultimate.Backbone.View
       needSize = @totalItems * @itemSize
       @jLine[@sizeAttr](needSize)  if @jLine[@sizeAttr]() < needSize
       @displayItems = Math.round(@jDisplay[@sizeAttr]() / @itemSize)
-      @moveItems = Math.round(@displayItems / 2)
+      @moveItems ||= Math.round(@displayItems / 2)
       @overItems = @totalItems - @displayItems
       if @overItems
         if @prevItems
