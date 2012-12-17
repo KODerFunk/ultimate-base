@@ -18,22 +18,25 @@
 # 1 _.string.startsWith
 
 class Ultimate.Plugin
+  cid: null
   el: null
   $el: null
-  nodes: {}
-  events: {}
+  nodes: null
+  events: null
 
-  options: {}
+  options: null
 
   # @defaultLocales: { en: {} }
   locale: 'en'
-  translations: {}
+  translations: null
 
   constructor: (options) ->
+    # TODO
     throw new Error('Property `el` must be specified at first argument of Ultimate.Plugin.constructor')  unless options?.el
     @cid = _.uniqueId('ultimatePlugin_')
     @_configure options
-    @$el = $(@el)
+    @$el = $(@el).first()
+    @el = @$el[0]
     @findNodes()
     @initialize? arguments...
     @delegateEvents()
@@ -99,7 +102,8 @@ class Ultimate.Plugin
       events = normalizedEvents
     events
 
-  _configure: (options) ->
+  _configure: (options = {}) ->
+    @options ||= null
     _.extend @options, options
     #cout '@options', @options
     @_reflectOptions()
