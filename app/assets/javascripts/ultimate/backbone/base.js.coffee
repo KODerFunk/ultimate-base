@@ -5,7 +5,7 @@
 #= require ultimate/base
 #= require ultimate/helpers
 
-@Ultimate.Backbone =
+@Ultimate.Backbone ||=
 
   debugMode: false
 
