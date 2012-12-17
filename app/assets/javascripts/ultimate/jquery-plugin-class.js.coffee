@@ -103,7 +103,7 @@ class Ultimate.Plugin
     events
 
   _configure: (options = {}) ->
-    @options ||= null
+    @options ||= {}
     _.extend @options, options
     #cout '@options', @options
     @_reflectOptions()
@@ -116,6 +116,7 @@ class Ultimate.Plugin
 
   # use I18n, and modify locale and translations
   _initTranslations: ->
+    @translations ||= {}
     if @constructor.defaultLocales?
       if not @options["locale"] and I18n?.locale of @constructor.defaultLocales
         @locale = I18n.locale
