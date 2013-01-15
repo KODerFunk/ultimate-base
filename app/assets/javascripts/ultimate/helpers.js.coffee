@@ -50,7 +50,7 @@
   r = {}
   for e in q
     t = e.split('=')
-    r[t[0]] = t[1]
+    r[decodeURIComponent(t[0])] = decodeURIComponent(t[1])
   r
 
 @respondFormat = (url, format = null) ->
