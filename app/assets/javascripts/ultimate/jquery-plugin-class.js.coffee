@@ -31,8 +31,6 @@ class Ultimate.Plugin
   translations: null
 
   constructor: (options) ->
-    # TODO
-    throw new Error('Property `el` must be specified at first argument of Ultimate.Plugin.constructor')  unless options?.el
     @cid = _.uniqueId('ultimatePlugin_')
     @_configure options
     @$el = $(@el).first()
