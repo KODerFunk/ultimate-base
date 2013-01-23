@@ -9,7 +9,6 @@ test "EmptyPlugin", ->
   $('#qunit-fixture').html '<div class="test-plugin"><div class="test-plugin__inner"></div></div>'
   plugin = new EmptyPlugin(el: '.test-plugin')
 
-  throws (-> new EmptyPlugin), "plugin can't build without `el` as option"
   ok /^ultimatePlugin_\d+$/.test(plugin.cid)
   ok plugin.$el.length is 1
   jDiv = plugin.$('div')
