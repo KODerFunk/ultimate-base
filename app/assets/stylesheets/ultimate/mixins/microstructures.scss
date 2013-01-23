@@ -51,10 +51,10 @@ $support-ie: true !default;
       @if nth($include-properties, $i) and $property {
         $complex: complex-list($property);
         @if isset($width) {
-          $width: $width - nth($complex, 2) - nth($complex, 4);
+          $width: _dec-size($width, nth($complex, 2), nth($complex, 4));
         }
         @if isset($height) {
-          $height: $height - nth($complex, 1) - nth($complex, 3);
+          $height: _dec-size($height, nth($complex, 1), nth($complex, 3));
         }
       }
       @if $property-name == border-width and length($property) == 1 {

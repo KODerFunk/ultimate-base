@@ -118,3 +118,13 @@
 @function find-color($list, $default: false) {
   @return find-typed-item($list, color, $default);
 }
+
+@function _dec-size($value, $dec-list...) {
+  $value-unit: unit($value);
+  @each $dec-value in $dec-list {
+    @if unit($dec-value) == $value-unit {
+      $value: $value - $dec-value;
+    }
+  }
+  @return $value;
+}
