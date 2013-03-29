@@ -114,28 +114,11 @@ $support-ie: true !default;
   }
 }
 
-//  Set to container includes float blocks.
-@mixin g-line($clear: both) {
-  @include deprecate("@include g-line;", "overflow: hidden;");
-  @if $support-ie {
-    *zoom: 1;
-    _height: 0;
-  }
-  @include clearfix($clear);
-}
-
 // Adapted from: [A new micro clearfix hack](http://nicolasgallagher.com/micro-clearfix-hack/)
 @mixin clearfix($clear: both) {
   @include both(table) {
     clear: $clear;
   }
-}
-
-//  Set to element which disappear after animation in IE6-7.
-@mixin fix-disapp {
-  @include deprecate("@include fix-disapp;");
-  *overflow: hidden;
-  _zoom: 1;
 }
 
 //  Provides a cross-browser method to implement `display: inline-block;`
@@ -154,18 +137,19 @@ $support-ie: true !default;
     *display: inline;
     *zoom: 1;
   }
-  @if $width != none and $width != false {
+  @if isset($width) {
     width: $width;
   }
-  @if $height != none and $height != false {
+  @if isset($height) {
     height: $height;
   }
-  @if $vertical-align != none and $vertical-align != false {
+  @if isset($vertical-align) {
     vertical-align: $vertical-align;
   }
 }
 
-@mixin g-justify($item: unquote(".item")) {
+// TODO: rename to "justify"
+@mixin g-justify($item: ".item") {
   text-align: justify;
   @if $support-ie {
     text-justify: newspaper;
@@ -195,7 +179,7 @@ $support-ie: true !default;
 }
 
 @mixin block-list($item: "li") {
-  overflow: hidden; // @include g-line;
+  overflow: hidden;
   position: relative;
   list-style: none;
   margin: 0;

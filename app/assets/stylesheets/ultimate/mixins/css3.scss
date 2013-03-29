@@ -22,7 +22,6 @@ $boxsizing-url: asset-url("polyfills/boxsizing.htc", '') !default;
 
 @import "ultimate/mixins/vendors";
 @import "ultimate/mixins/routines";
-@import "ultimate/mixins/css3/text-shadow";
 
 //  Round all corners by a specific amount.
 //    example:
@@ -160,12 +159,19 @@ $boxsizing-url: asset-url("polyfills/boxsizing.htc", '') !default;
     $p: $p + $percents-by-stop;
   }
   $bg-color: nth(nth($stops, 1), 1);
-  background-color: $bg-color;
+  // TODO: need check all color stops
+  @if alpha($bg-color) == 1 {
+    background-color: $bg-color;
+  }
   background-image: -webkit-gradient(linear, $wk_start, $wk_end, $wk_stops);
   $linear-gradient: linear-gradient($corner_angle, change-separator($stops));
   @include vendors-param(webkit moz ms o, background-image, $linear-gradient);
   @if $support-ie and $pie-url {
-    -pie-background: $bg-color $linear-gradient;
+    @if alpha($bg-color) == 1 {
+      -pie-background: $bg-color $linear-gradient;
+    } else {
+      -pie-background: $linear-gradient;
+    }
   }
 }
 
@@ -247,7 +253,7 @@ $boxsizing-url: asset-url("polyfills/boxsizing.htc", '') !default;
 // For rgba()
 @mixin pie-bg($bg) {
   background: $bg;
-  @if $support-ie and $pie-url and type-of($bg) == "color" and alpha($bg) < 1 {
+  @if $support-ie and $pie-url and type-of($bg) == color and alpha($bg) < 1 {
     -pie-background: $bg;
   }
 }
@@ -260,7 +266,7 @@ $boxsizing-url: asset-url("polyfills/boxsizing.htc", '') !default;
 //      -o-text-overflow: ellipsis; // Opera Mini and Opera Mobile
 //         text-overflow: ellipsis; // all
 @mixin ellipsis($overflow: hidden, $nowrap: true) {
-  @if $overflow != false {
+  @if isset($overflow) {
     overflow: $overflow;
   }
   @if $nowrap {
