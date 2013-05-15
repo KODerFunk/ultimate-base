@@ -2,18 +2,11 @@
 #    jquery ~> 1.7.0
 #    underscore ~> 1.3.0
 
-#= require ultimate/base
-#= require ultimate/helpers
+#= require ../base
 
-@Ultimate.Backbone ||=
+Ultimate.Backbone ||=
 
-  debugMode: false
-
-  debug: ->
-    if @debugMode
-      a = ["info", "Ultimate.Backbone"]
-      Array::push.apply a, arguments  if arguments.length > 0
-      cout.apply @, a
+  ViewMixins: {}
 
   isView: (view) -> view instanceof Backbone.View
 
@@ -24,3 +17,9 @@
   isCollection: (collection) -> collection instanceof Backbone.Collection
 
   isRouter: (router) -> router instanceof Backbone.Router
+
+#  MixinSupport:
+#    include: (mixin) ->
+#      unless mixin?
+#        throw new Error('Mixin is undefined')
+#      _.extend @::, mixin

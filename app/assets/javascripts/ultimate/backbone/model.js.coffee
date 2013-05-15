@@ -10,7 +10,6 @@ class Ultimate.Backbone.Model extends Backbone.Model
   expireTime: Infinity
 
   constructor: (attributes, options = {}) ->
-    Ultimate.Backbone.debug ".Model.constructor()", @
     @expireTime = options.expireTime  if options.expireTime?
     @on 'sync', =>
       @loadedTimeStamp = new Date()

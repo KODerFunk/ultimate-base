@@ -8,7 +8,6 @@ class Ultimate.Backbone.Collection extends Backbone.Collection
   expireTime: Infinity
 
   constructor: (models, options = {}) ->
-    Ultimate.Backbone.debug ".Collection.constructor()", @
     @expireTime = options.expireTime  if options.expireTime?
     super
 
