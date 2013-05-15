@@ -8,18 +8,60 @@ class Ultimate.Backbone.App
   Models: {}
   Collections: {}
   Routers: {}
+  ViewMixins: {}
+  ProtoViews: {}
   Views: {}
-
-  scopes: ["Models", "Collections", "Routers", "Views"]
+  viewInstances: []
 
   constructor: (name = null) ->
-    Ultimate.Backbone.debug ".App.constructor()", @
     if @constructor.App
-      throw new Error("Can't create new Ultimate.Backbone.App because the single instance has already been created");
+      throw new Error('Can\'t create new Ultimate.Backbone.App because the single instance has already been created')
     else
+      cout 'info', 'Ultimate.Backbone.App.constructor', name, @
       @constructor.App = @
       @name = name
-      _.extend @[scope], Backbone.Events  for scope in @scopes
+
+  start: ->
+    @bindViews()
+    @bindCustomElements()
+
+  bindViews: (jRoot = $('html')) ->
+    bindedViews = []
+    for viewName, viewClass of @Views when viewClass::el
+      #cout 'info', "Try bind #{viewName} [#{viewClass::el}]"
+      jRoot.find(viewClass::el).each (index, el) =>
+        view = new viewClass(el: el)
+        cout 'info', "Binded view #{viewName}:", view
+        @viewInstances.push view
+        bindedViews.push view
+    bindedViews
+
+  unbindViews: (views) ->
+    view.undelegateEvents()  for view in views
+    @viewInstances = _.without(@viewInstances, views...)
+
+  getFirstView: (viewClass) ->
+    for view in @viewInstances
+      if view.constructor is viewClass
+        return view
+    return null
+
+  getAllViews: (viewClass) ->
+    _.filter(@viewInstances, (view) -> view.constructor is viewClass)
+
+
+
+  customElementBinders: []
+
+  registerCustomElementBinder: (binder) ->
+    @customElementBinders.push binder
+
+  bindCustomElements: (jRoot = $('body')) ->
+    for binder in @customElementBinders
+      if _.isFunction(binder)
+        binder jRoot
+      else
+        jRoot.find(binder['selector'])[binder['method']] binder['arguments']...
 
 
 

@@ -2,10 +2,6 @@
 
 class Ultimate.Backbone.Router extends Backbone.Router
 
-  constructor: ->
-    Ultimate.Backbone.debug ".Router.constructor()", @
-    super
-
   namedParam    = /:\w+/g
   splatParam    = /\*\w+/g
   escapeRegExp  = /[-[\]{}()+?.,\\^$|#\s]/g

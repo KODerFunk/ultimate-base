@@ -1,4 +1,3 @@
-# TODO simlify translations infrastructure
 # `pluginClass` must store propery `$el` as jQuery object wrapped on the target DOM-object in his instance.
 
 #= require ./base
@@ -14,7 +13,6 @@
 # 1 _.bind
 # 1 _.clone
 # 1 _.outcasts.delete
-# 1 _.string.underscored
 # 1 _.string.startsWith
 
 class Ultimate.Plugin
@@ -25,10 +23,6 @@ class Ultimate.Plugin
   events: null
 
   options: null
-
-  # @defaultLocales: { en: {} }
-  locale: 'en'
-  translations: null
 
   constructor: (options) ->
     @cid = _.uniqueId('ultimatePlugin_')
@@ -71,7 +65,7 @@ class Ultimate.Plugin
     @_delegateEvents args...
 
   # delegateEvents() from backbone.js
-  _delegateEvents: (events = _.result(@, "events")) ->
+  _delegateEvents: (events = _.result(@, 'events')) ->
     return  unless events
     @undelegateEvents()
     for key, method of events
@@ -86,7 +80,7 @@ class Ultimate.Plugin
         @$el.delegate(selector, eventName, method)
 
   _normalizeEvents: (events) ->
-    events = _.result(@, "events")  unless events
+    events = _.result(@, 'events')  unless events
     if events
       normalizedEvents = {}
       for key, method of events
@@ -103,25 +97,9 @@ class Ultimate.Plugin
   _configure: (options = {}) ->
     @options ||= {}
     _.extend @options, options
-    #cout '@options', @options
     @_reflectOptions()
-    @_initTranslations()
 
-  _reflectOptions: (reflectableOptions = _.result(@, "reflectableOptions"), options = @options) ->
+  _reflectOptions: (reflectableOptions = _.result(@, 'reflectableOptions'), options = @options) ->
     if _.isArray(reflectableOptions)
       @[attr] = options[attr]  for attr in reflectableOptions  when not _.isUndefined(options[attr])
     @[attr] = value  for attr, value of options  when not _.isUndefined(@[attr])
-
-  # use I18n, and modify locale and translations
-  _initTranslations: ->
-    @translations ||= {}
-    if @constructor.defaultLocales?
-      if not @options["locale"] and I18n?.locale of @constructor.defaultLocales
-        @locale = I18n.locale
-        #cout '!!!Set LOCALE FROM I18N ', @locale
-      defaultTranslations = if @locale then @constructor.defaultLocales[@locale] or {} else {}
-      #cout '!!!defaultTranslations', @locale, defaultTranslations
-      _.defaults @translations, defaultTranslations
-
-  t: (key) ->
-    @translations[key] or _.string.humanize(key)
