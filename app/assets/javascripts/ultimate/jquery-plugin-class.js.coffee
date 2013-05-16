@@ -99,7 +99,5 @@ class Ultimate.Plugin
     _.extend @options, options
     @_reflectOptions()
 
-  _reflectOptions: (reflectableOptions = _.result(@, 'reflectableOptions'), options = @options) ->
-    if _.isArray(reflectableOptions)
-      @[attr] = options[attr]  for attr in reflectableOptions  when not _.isUndefined(options[attr])
+  _reflectOptions: (options = @options) ->
     @[attr] = value  for attr, value of options  when not _.isUndefined(@[attr])

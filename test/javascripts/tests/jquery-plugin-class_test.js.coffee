@@ -21,7 +21,6 @@ test "EmptyPlugin", ->
 
 class TestPlugin extends Ultimate.Plugin
   someOption: null
-  reflectableOptions: -> ['thirdOption']
   @defaultLocales =
     en:
       someMessage: 'English message.'
@@ -36,12 +35,10 @@ test "TestPlugin", ->
     el: '.test-plugin'
     someOption: 'bingo!'
     otherOption: 'ringo!'
-    thirdOption: 'dingo!'
     locale: 'de'
 
   equal plugin.someOption, 'bingo!'
   ok typeof plugin.otherOption is 'undefined'
-  equal plugin.thirdOption, 'dingo!'
   equal plugin.locale, 'de'
   deepEqual plugin.translations, {}
 #  equal plugin.t('someMessage'), 'Some message'
