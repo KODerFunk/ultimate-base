@@ -44,7 +44,7 @@ class Ultimate.Backbone.App
     for view in @viewInstances
       if view.constructor is viewClass
         return view
-    return null
+    null
 
   getAllViews: (viewClass) ->
     _.filter(@viewInstances, (view) -> view.constructor is viewClass)

@@ -2,11 +2,22 @@
 
 class Ultimate.Backbone.View extends Backbone.View
 
-# Mixins support
-  @include: (mixin) ->
+  @mixinNames: []
+
+  # Mixins support
+  @include: (mixin, name = null) ->
+    @mixinNames.push(name)  if name?
     unless mixin?
-      throw new Error('Mixin is undefined')
+      throw new Error("Mixin #{name} is undefined")
     _.extend @::, mixin
+
+  mixinsEvents: (events = {}) ->
+    _.reduce( @constructor.mixinNames,  ( (memo, name) -> _.extend(memo, _.result(@, _.string.camelize(name + 'Events'))) ), events, @ )
+
+  mixinsInitialize: ->
+    for name in @constructor.mixinNames
+      @[_.string.camelize(name + 'Initialize')]? arguments...
+    @
 
   __super: (methodName, args) ->
     obj = @
