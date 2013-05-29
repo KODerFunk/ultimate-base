@@ -23,7 +23,7 @@ class Ultimate.Backbone.App
 
   start: ->
     @bindViews()
-    @bindCustomElements()
+    @bindCustomElements(true)
 
   bindViews: (jRoot = $('html')) ->
     bindedViews = []
@@ -56,12 +56,9 @@ class Ultimate.Backbone.App
   registerCustomElementBinder: (binder) ->
     @customElementBinders.push binder
 
-  bindCustomElements: (jRoot = $('body')) ->
+  bindCustomElements: (jRoot = $('body'), initial = false) ->
     for binder in @customElementBinders
-      if _.isFunction(binder)
-        binder jRoot
-      else
-        jRoot.find(binder['selector'])[binder['method']] binder['arguments']...
+      binder arguments...
 
 
 
