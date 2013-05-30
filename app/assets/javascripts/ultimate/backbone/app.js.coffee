@@ -23,7 +23,7 @@ class Ultimate.Backbone.App
 
   start: ->
     @bindViews()
-    @bindCustomElements(true)
+    @bindCustomElements(null, true)
 
   bindViews: (jRoot = $('html')) ->
     bindedViews = []
