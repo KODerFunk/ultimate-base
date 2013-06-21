@@ -4,7 +4,8 @@ class Ultimate.Backbone.App
   @App: null
 
   name: null
-  oneViewOnElement: true
+  warnOnMultibind: true
+  preventMultibind: false
 
   Models: {}
   Collections: {}
@@ -31,24 +32,29 @@ class Ultimate.Backbone.App
     for viewName, viewClass of @Views when viewClass::el
       #cout 'info', "Try bind #{viewName} [#{viewClass::el}]"
       jRoot.find(viewClass::el).each (index, el) =>
-        if @oneViewOnElement
-          @_checkViewsOnElement el
-        view = new viewClass(el: el)
-        cout 'info', "Binded view #{viewName}:", view
-        @viewInstances.push view
-        bindedViews.push view
+        if @canBind(el, viewClass)
+          view = new viewClass(el: el)
+          cout 'info', "Binded view #{viewName}:", view
+          @viewInstances.push view
+          bindedViews.push view
     bindedViews
+
+  canBind: (element, viewClass) ->
+    if @warnOnMultibind or @preventMultibind
+      views = @getViewsOnElement(element)
+      l = views.length
+      if l > 0
+        if @warnOnMultibind
+          cout 'warn', "Element already has binded #{l} view#{if l > 1 then 's' else ''}", element, viewClass, views
+        not @preventMultibind
+      else
+        true
+    else
+      true
 
   getViewsOnElement: (element) ->
     element = if element instanceof jQuery then element[0] else element
     _.where @viewInstances, el: element
-
-  _checkViewsOnElement: (element) ->
-    alreadyBinded = @getViewsOnElement(element)
-    l = alreadyBinded.length
-    if l > 0
-      cout 'warn', "Element already has binded #{l} view#{if l > 1 then 's' else ''}", element, alreadyBinded
-    alreadyBinded
 
   unbindViews: (views) ->
     view.undelegateEvents()  for view in views
