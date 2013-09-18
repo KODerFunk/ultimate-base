@@ -57,7 +57,9 @@ class Ultimate.Backbone.App
     _.where @viewInstances, el: element
 
   unbindViews: (views) ->
-    view.undelegateEvents()  for view in views
+    for view in views
+      view.undelegateEvents()
+      view.leave?()
     @viewInstances = _.without(@viewInstances, views...)
 
   getFirstView: (viewClass) ->

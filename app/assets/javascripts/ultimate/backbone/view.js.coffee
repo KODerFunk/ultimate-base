@@ -2,10 +2,15 @@
 
 class Ultimate.Backbone.View extends Backbone.View
 
-  @mixinNames: []
+  @mixinNames: null
+
+  # Rest mixinNames
+  @mixinable: ->
+    @mixinNames = _.clone(@mixinNames)
 
   # Mixins support
   @include: (mixin, name = null) ->
+    @mixinNames ||= []
     @mixinNames.push(name)  if name?
     unless mixin?
       throw new Error("Mixin #{name} is undefined")
@@ -19,6 +24,7 @@ class Ultimate.Backbone.View extends Backbone.View
       @[_.string.camelize(name + 'Initialize')]? arguments...
     @
 
+  # TODO comment for this trick
   __super: (methodName, args) ->
     obj = @
     calledMethod = @[methodName]
