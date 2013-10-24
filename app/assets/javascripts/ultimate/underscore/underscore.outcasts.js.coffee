@@ -4,7 +4,7 @@
   Underscore.outcasts is freely distributable under the terms of the MIT license.
   Documentation: https://github.com/KODerFunk/underscore.outcasts
   Some code is borrowed from outcasts pull requests to Underscore.
-  Version '0.1.5'
+  Version '0.1.6'
 ###
 
 'use strict'
@@ -176,6 +176,19 @@ UnderscoreOutcasts =
     else
       groups
 
+  ###
+   Create a (deep-cloned) duplicate of an object.
+  ###
+  deepClone: (obj) ->
+    return obj unless _.isObject(obj)
+    if _.isArray(obj)
+      obj.slice()
+    else
+      newObj = {}
+      if obj
+        for prop, value of obj
+          newObj[prop] = @deepClone(value)
+      newObj
 
 
   exports: ->
