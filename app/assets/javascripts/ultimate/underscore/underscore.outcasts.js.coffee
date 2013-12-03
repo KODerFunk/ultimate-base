@@ -15,7 +15,7 @@
 
 UnderscoreOutcasts =
 
-  VERSION: '0.1.5'
+  VERSION: '0.1.6'
 
   delete: (object, key) ->
     value = object[key]
@@ -179,14 +179,15 @@ UnderscoreOutcasts =
   ###
    Create a (deep-cloned) duplicate of an object.
   ###
+  # TODO tests
   deepClone: (obj) ->
     return obj unless _.isObject(obj)
     if _.isArray(obj)
-      obj.slice()
+      @deepClone(element) for element in obj
     else
       newObj = {}
       if obj
-        for prop, value of obj
+        for prop, value of obj when not _.isFunction(value)
           newObj[prop] = @deepClone(value)
       newObj
 
