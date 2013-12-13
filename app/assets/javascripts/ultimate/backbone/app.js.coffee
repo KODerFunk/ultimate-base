@@ -6,6 +6,8 @@ class Ultimate.Backbone.App
   name: null
   warnOnMultibind: true
   preventMultibind: false
+  performanceReport: true
+  alternateBinding: false
 
   Models: {}
   Collections: {}
@@ -24,8 +26,22 @@ class Ultimate.Backbone.App
       @name = name
 
   start: ->
-    @bindViews()
+    @performanceReport = DEBUG_MODE if @performanceReport
+    if @performanceReport
+      if _.isFunction(performance?.now)
+        performanceStart = performance.now()
+      else
+        cout 'warn', 'performance.now() isnt available'
+        @performanceReport = null
+    bindedViewsCount = (if @alternateBinding then @___bindViews() else @bindViews()).length
+    if @performanceReport
+      performanceViews = performance.now()
+      cout 'info', "Binded #{bindedViewsCount} view#{if bindedViewsCount is 1 then '' else 's'} in #{Math.round((performanceViews - performanceStart) * 1000)}\u00B5s"
     @bindCustomElements(null, true)
+    if @performanceReport
+      performanceBinders = performance.now()
+      bindersCount = @customElementBinders.length
+      cout 'info', "Processed #{bindersCount} custom element binder#{if bindersCount is 1 then '' else 's'} in #{Math.round((performanceBinders - performanceViews) * 1000)}\u00B5s"
 
   bindViews: (jRoot = $('html')) ->
     bindedViews = []
@@ -35,6 +51,19 @@ class Ultimate.Backbone.App
         if @canBind(el, viewClass)
           view = new viewClass(el: el)
           cout 'info', "Binded view #{viewName}:", view
+          @viewInstances.push view
+          bindedViews.push view
+    bindedViews
+
+  ___bindViews: (jRoot = $('html')) ->
+    bindedViews = []
+    allSelectors = (viewClass::el for viewName, viewClass of @Views when viewClass::el).join(', ')
+    jAllElements = jRoot.find(allSelectors)
+    for viewName, viewClass of @Views when viewClass::el
+      jAllElements.filter(viewClass::el).each (index, el) =>
+        if @canBind(el, viewClass)
+          view = new viewClass(el: el)
+          cout 'info', "Alternate! Binded view #{viewName}:", view
           @viewInstances.push view
           bindedViews.push view
     bindedViews

@@ -15,9 +15,9 @@ window.LOG_TODO ?= DEBUG_MODE
       method.apply(console, args)
     else
       method(args)
-  return args[0]
+  args[0]
 
-@_cout = =>
+@_cout = ->
   console.log(arguments)  if console?
   arguments[0]
 
