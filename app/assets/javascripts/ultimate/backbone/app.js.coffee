@@ -7,7 +7,6 @@ class Ultimate.Backbone.App
   warnOnMultibind: true
   preventMultibind: false
   performanceReport: true
-  alternateBinding: false
 
   Models: {}
   Collections: {}
@@ -33,7 +32,7 @@ class Ultimate.Backbone.App
       else
         cout 'warn', 'performance.now() isnt available'
         @performanceReport = null
-    bindedViewsCount = (if @alternateBinding then @___bindViews() else @bindViews()).length
+    bindedViewsCount = @bindViews().length
     if @performanceReport
       performanceViews = performance.now()
       cout 'info', "Binded #{bindedViewsCount} view#{if bindedViewsCount is 1 then '' else 's'} in #{Math.round((performanceViews - performanceStart) * 1000)}\u00B5s"
@@ -51,19 +50,6 @@ class Ultimate.Backbone.App
         if @canBind(el, viewClass)
           view = new viewClass(el: el)
           cout 'info', "Binded view #{viewName}:", view
-          @viewInstances.push view
-          bindedViews.push view
-    bindedViews
-
-  ___bindViews: (jRoot = $('html')) ->
-    bindedViews = []
-    allSelectors = (viewClass::el for viewName, viewClass of @Views when viewClass::el).join(', ')
-    jAllElements = jRoot.find(allSelectors)
-    for viewName, viewClass of @Views when viewClass::el
-      jAllElements.filter(viewClass::el).each (index, el) =>
-        if @canBind(el, viewClass)
-          view = new viewClass(el: el)
-          cout 'info', "Alternate! Binded view #{viewName}:", view
           @viewInstances.push view
           bindedViews.push view
     bindedViews
