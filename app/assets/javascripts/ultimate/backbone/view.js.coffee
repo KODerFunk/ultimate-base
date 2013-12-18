@@ -6,7 +6,7 @@ class Ultimate.Backbone.View extends Backbone.View
 
   # Rest mixinNames
   @mixinable: ->
-    @mixinNames = _.clone(@mixinNames)
+    @mixinNames = if @mixinNames then _.clone(@mixinNames) else []
 
   # Mixins support
   @include: (mixin, name = null) ->
@@ -17,11 +17,11 @@ class Ultimate.Backbone.View extends Backbone.View
     _.extend @::, mixin
 
   mixinsEvents: (events = {}) ->
-    _.reduce( @constructor.mixinNames,  ( (memo, name) -> _.extend(memo, _.result(@, _.string.camelize(name + 'Events'))) ), events, @ )
+    _.reduce( @constructor.mixinNames,  ( (memo, name) -> _.extend(memo, _.result(@, name + 'Events')) ), events, @ )
 
   mixinsInitialize: ->
     for name in @constructor.mixinNames
-      @[_.string.camelize(name + 'Initialize')]? arguments...
+      @[name + 'Initialize']? arguments...
     @
 
   # TODO comment for this trick
