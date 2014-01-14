@@ -4,6 +4,10 @@ class Ultimate.Backbone.View extends Backbone.View
 
   @mixinNames: null
 
+  constructor: (options) ->
+    @reflectOptions options
+    super
+
   # Rest mixinNames
   @mixinable: ->
     @mixinNames = if @mixinNames then _.clone(@mixinNames) else []
@@ -34,11 +38,6 @@ class Ultimate.Backbone.View extends Backbone.View
       throw new Error("__super can't find super method '#{methodName}'")
     superMethod.apply @, args
 
-  # Overload parent method Backbone.View._configure() as hook for reflectOptions()
-  _configure: (options) ->
-    super
-    @reflectOptions()
-
-  reflectOptions: (options = @options) ->
+  reflectOptions: (options) ->
     @[attr] = value  for attr, value of options  when not _.isUndefined(@[attr])
     @
