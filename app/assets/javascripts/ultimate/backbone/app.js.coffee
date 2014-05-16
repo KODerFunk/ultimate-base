@@ -43,6 +43,7 @@ class Ultimate.Backbone.App
       cout 'info', "Processed #{bindersCount} custom element binder#{if bindersCount is 1 then '' else 's'} in #{Math.round((performanceBinders - performanceViews) * 1000)}\u00B5s"
 
   bindViews: (jRoot = $('html')) ->
+    console?.groupCollapsed? 'bindViews on', jRoot
     bindedViews = []
     for viewName, viewClass of @Views when viewClass::el
       #cout 'info', "Try bind #{viewName} [#{viewClass::el}]"
@@ -52,6 +53,7 @@ class Ultimate.Backbone.App
           cout 'info', "Binded view #{viewName}:", view
           @viewInstances.push view
           bindedViews.push view
+    console?.groupEnd?()
     bindedViews
 
   canBind: (element, viewClass) ->
