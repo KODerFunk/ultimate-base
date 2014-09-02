@@ -45,7 +45,8 @@ class Ultimate.Backbone.App
   bindViews: (jRoot = $('html')) ->
     console?.groupCollapsed? 'bindViews on', jRoot
     bindedViews = []
-    for viewName, viewClass of @Views when viewClass::el
+    sortedViews = _.sortBy(_.pairs(@Views), (p) -> p[1].priority)
+    for [viewName, viewClass] in sortedViews when viewClass::el
       #cout 'info', "Try bind #{viewName} [#{viewClass::el}]"
       jRoot.find(viewClass::el).each (index, el) =>
         if @canBind(el, viewClass)
