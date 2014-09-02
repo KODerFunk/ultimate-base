@@ -55,3 +55,16 @@ window.LOG_TODO ?= DEBUG_MODE
   ah[0] = ad.join('.')
   aq[0] = ah.join('#')
   aq.join('?')
+
+@waitFor = (delay, times, check, success, fail) ->
+  startWaitFor = ->
+    setTimeout ( ->
+      times--
+      if check()
+        success?(times)
+      else if times > 0
+        startWaitFor()
+      else
+        fail?()
+    ), delay
+  startWaitFor()
