@@ -7,6 +7,7 @@ class Ultimate.Backbone.App
   warnOnMultibind: true
   preventMultibind: false
   performanceReport: true
+  groupBindingLog: true
 
   Models: {}
   Collections: {}
@@ -43,7 +44,8 @@ class Ultimate.Backbone.App
       cout 'info', "Processed #{bindersCount} custom element binder#{if bindersCount is 1 then '' else 's'} in #{Math.round((performanceBinders - performanceViews) * 1000)}\u00B5s"
 
   bindViews: (jRoot = $('html')) ->
-    console?.groupCollapsed? 'bindViews on', jRoot
+    if @groupBindingLog
+      console?.groupCollapsed? 'bindViews on', jRoot
     bindedViews = []
     sortedViews = _.sortBy(_.pairs(@Views), (p) -> p[1].priority)
     for [viewName, viewClass] in sortedViews when viewClass::el
@@ -54,7 +56,8 @@ class Ultimate.Backbone.App
           cout 'info', "Binded view #{viewName}:", view
           @viewInstances.push view
           bindedViews.push view
-    console?.groupEnd?()
+    if @groupBindingLog
+      console?.groupEnd?()
     bindedViews
 
   canBind: (element, viewClass) ->
